@@ -67,14 +67,14 @@ def visualize_results(img1, img2):
 
     plt.subplot(1, 2, 2)
     plt.imshow(img2, cmap='gray')
-    plt.title('Image Déformée')
+    plt.title('Image Déformée de (15, 10)')
 
 
     plt.show()
 
 if __name__ == '__main__':
     # Load images
-    img1, img2 = load_images('images/reference_image.jpeg', 'images/reference_image_rotate_90.jpeg')
+    img1, img2 = load_images('images/img_org_translated_img.PNG', 'images/img_ref_translated_img.PNG')
     
     # Visualize the images
     visualize_results(img1, img2)
