@@ -46,7 +46,7 @@ def demonstrate_transformation(image_path, save_path='transformed_image.jpg'):
         return
         
     # Apply transformation
-    tx, ty = 50, 30  # Translation
+    tx, ty = 10, 20  # Translation
     angle = 15       # Rotation angle in degrees
     scale = 0.9      # Scaling factor
     
@@ -66,4 +66,4 @@ def demonstrate_transformation(image_path, save_path='transformed_image.jpg'):
     return img, transformed
 
 # Example usage:
-original, transformed = demonstrate_transformation('images/img_org_translated_img.PNG', 'images/test_image.png')
+original, transformed = demonstrate_transformation('images/number2.png', 'images/number2_transformed.png')
