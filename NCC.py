@@ -103,8 +103,8 @@ def calculate_ncc_score(img_ref, img_mov):
 # Script principal
 if __name__ == "__main__":
     # 1. Charger vos images (remplacez par vos chemins)
-    img_ref = cv2.imread('images/number2.png')  # image fixe
-    img_mov = cv2.imread('images/number2_rotated.png')     # image à recaler
+    img_ref = cv2.imread('images/img_org.png')
+    img_mov = cv2.imread('images/img_(10,15)_30_1-2.png')
     
     # Score NCC avant recalage
     ncc_before = calculate_ncc_score(img_ref, img_mov)

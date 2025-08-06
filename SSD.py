@@ -23,9 +23,7 @@ def ssd_cost(params, img_ref, img_mov, mask=None):
     else:
         diff = img_ref - img_transformed
     
-        print(np.sum(diff**2))
-        
-        return np.sum(diff**2)
+    return np.sum(diff**2)
 
 def register_images_ssd(img_ref, img_mov, initial_params=[0, 0, 0]):
     """Fonction principale qui trouve les meilleurs paramètres de recalage"""
@@ -52,7 +50,7 @@ def apply_transformation(img, params):
     """Applique la transformation trouvée à une image"""
     tx, ty, angle = params  # récupère les paramètres
     
-    # Création de la même matrice de transformation
+		# Création de la même matrice de transformation
     M = cv2.getRotationMatrix2D((img.shape[1]//2, img.shape[0]//2), angle, 1.0)
     M[0, 2] += tx
     M[1, 2] += ty
@@ -62,8 +60,8 @@ def apply_transformation(img, params):
 # Exemple d'utilisation
 if __name__ == "__main__":
     # Charger vos images
-    img_ref = cv2.imread('images/number2.png')
-    img_mov = cv2.imread('images/number2_rotated.png')
+    img_ref = cv2.imread('images/img_org.png')
+    img_mov = cv2.imread('images/img_(10,15)_30_1-2.png')
     
     # 2. Lancer le recalage (trouve les meilleurs paramètres)
     params = register_images_ssd(img_ref, img_mov)

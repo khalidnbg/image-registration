@@ -55,4 +55,4 @@ def demonstrate_translation(image_path, save_path='translated_image.jpg'):
     return img, translated
 
 # Example usage:
-original, translated = demonstrate_translation('images/number2.png', 'images/number2_translated.png')
+original, translated = demonstrate_translation('images/image_test.jpg', 'images/image_test_translated16_52.jpg')
