@@ -4,7 +4,7 @@ from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
 def ssd_cost(params, img_ref, img_mov, mask=None):
-    """Calcule le coût SSD entre image de référence et image mobile transformée"""
+    """Coût SSD avec interpolation bilinéaire et gestion des bords."""
     tx, ty, angle = params
     
     # Matrice de transformation
@@ -12,10 +12,14 @@ def ssd_cost(params, img_ref, img_mov, mask=None):
     M[0, 2] += tx
     M[1, 2] += ty
     
-    # Transformation de l'image mobile
-    img_transformed = cv2.warpAffine(img_mov, M, (img_ref.shape[1], img_ref.shape[0]))
+    # Transformation avec interpolation lisse et réflexion des bords
+    img_transformed = cv2.warpAffine(
+        img_mov, M, (img_ref.shape[1], img_ref.shape[0]),
+        flags=cv2.INTER_LINEAR,
+        borderMode=cv2.BORDER_REFLECT
+    )
     
-    # Calcul SSD
+    # Calcul SSD avec masque optionnel
     if mask is not None:
         diff = (img_ref - img_transformed) * mask
     else:
@@ -23,42 +27,93 @@ def ssd_cost(params, img_ref, img_mov, mask=None):
     
     return np.sum(diff**2)
 
-def register_images_ssd(img_ref, img_mov, initial_params=[0, 0, 0]):
-    """Recalage par optimisation SSD"""
-    
-    # Conversion en niveaux de gris si nécessaire
+def register_images_ssd(img_ref, img_mov, initial_params=[0.0, 0.0, 0.0]):
+    """Recalage SSD amélioré avec multi-start et pyramide d'images."""
+    # Conversion en niveaux de gris
     if len(img_ref.shape) == 3:
         img_ref = cv2.cvtColor(img_ref, cv2.COLOR_BGR2GRAY)
     if len(img_mov.shape) == 3:
         img_mov = cv2.cvtColor(img_mov, cv2.COLOR_BGR2GRAY)
     
-    # Normalisation
+    # Normalisation [0, 1]
     img_ref = img_ref.astype(np.float32) / 255.0
     img_mov = img_mov.astype(np.float32) / 255.0
+
+    # Approche multi-échelle (pyramide)
+    scales = [0.25, 0.5, 1.0]  # Résolutions réduites -> résolution originale
+    params = np.array(initial_params, dtype=np.float64)  # <-- Correction: float64
     
-    # Optimisation
-    result = minimize(ssd_cost, initial_params, 
-                     args=(img_ref, img_mov),
-                     method='Powell',
-                     options={'maxiter': 1000})
+    for scale in scales:
+        # Redimensionnement des images
+        if scale != 1.0:
+            ref_scaled = cv2.resize(img_ref, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
+            mov_scaled = cv2.resize(img_mov, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
+        else:
+            ref_scaled = img_ref
+            mov_scaled = img_mov
+        
+        # Ajustement des paramètres pour l'échelle (en float)
+        params_scaled = params.copy()
+        params_scaled[:2] *= scale  # <-- Pas d'erreur de type car float64
+
+        # Multi-start pour éviter les minima locaux
+        starts = [
+            params_scaled,
+            params_scaled + [5.0, 5.0, 10.0],
+            params_scaled + [-5.0, -5.0, -10.0],
+            params_scaled + [10.0, 0.0, 15.0],
+            params_scaled + [0.0, 10.0, -15.0]
+        ]
+        
+        best_params = params_scaled
+        best_ssd = np.inf
+        
+        for start in starts:
+            try:
+                result = minimize(
+                    ssd_cost, start,
+                    args=(ref_scaled, mov_scaled),
+                    method='Powell',
+                    options={'maxiter': 500, 'ftol': 1e-6}
+                )
+                if result.success and result.fun < best_ssd:
+                    best_ssd = result.fun
+                    best_params = result.x
+            except:
+                continue
+        
+        # Mise à jour des paramètres pour l'échelle suivante
+        params[:2] = best_params[:2] / scale  # <-- Conversion inverse en float
+        params[2] = best_params[2]  # L'angle ne change pas avec l'échelle
     
-    return result.x
+    return params
 
 def apply_transformation(img, params):
-    """Applique la transformation trouvée"""
+    """Applique la transformation finale."""
     tx, ty, angle = params
-    
     M = cv2.getRotationMatrix2D((img.shape[1]//2, img.shape[0]//2), angle, 1.0)
     M[0, 2] += tx
     M[1, 2] += ty
-    
     return cv2.warpAffine(img, M, (img.shape[1], img.shape[0]))
+
+def calculate_ssd_score(img_ref, img_mov):
+    """Calcule le score SSD entre deux images."""
+    if len(img_ref.shape) == 3:
+        img_ref = cv2.cvtColor(img_ref, cv2.COLOR_BGR2GRAY)
+    if len(img_mov.shape) == 3:
+        img_mov = cv2.cvtColor(img_mov, cv2.COLOR_BGR2GRAY)
+    img_ref = img_ref.astype(np.float32) / 255.0
+    img_mov = img_mov.astype(np.float32) / 255.0
+    return np.sum((img_ref - img_mov)**2)
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    # Charger vos images
-    img_ref = cv2.imread('images/tisdrin.png')  # image fixe
-    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')     # image à recaler
+    img_ref = cv2.imread('images/tisdrin.png')
+    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')
+    
+    # Score avant recalage
+    ssd_before = calculate_ssd_score(img_ref, img_mov)
+    print(f"SSD avant recalage: {ssd_before:.2f}")
     
     # Recalage
     params = register_images_ssd(img_ref, img_mov)
@@ -67,84 +122,20 @@ if __name__ == "__main__":
     # Application de la transformation
     img_registered = apply_transformation(img_mov, params)
     
+    # Score après recalage
+    ssd_after = calculate_ssd_score(img_ref, img_registered)
+    print(f"SSD après recalage: {ssd_after:.2f}")
+    print(f"Amélioration: {ssd_before - ssd_after:.2f}")
+    
     # Affichage
     plt.figure(figsize=(15, 5))
     plt.subplot(131)
     plt.imshow(cv2.cvtColor(img_ref, cv2.COLOR_BGR2RGB))
-    plt.title('Image de référence')
-    plt.axis('off')
-    
+    plt.title('Référence')
     plt.subplot(132)
     plt.imshow(cv2.cvtColor(img_mov, cv2.COLOR_BGR2RGB))
-    plt.title('Image mobile')
-    plt.axis('off')
-    
+    plt.title(f'Mobile (SSD: {ssd_before:.2f})')
     plt.subplot(133)
     plt.imshow(cv2.cvtColor(img_registered, cv2.COLOR_BGR2RGB))
-    plt.title('Image recalée')
-    plt.axis('off')
-    
-    plt.tight_layout()
+    plt.title(f'Recalée (SSD: {ssd_after:.2f})')
     plt.show()
-
-"""
-# Optimisation SSD pour le recalage d'images
-    result = minimize(
-        # 1. FONCTION À MINIMISER
-        ssd_cost,                    # Notre fonction qui calcule le coût SSD
-                                     # minimize() va appeler cette fonction avec 
-                                     # différentes valeurs de paramètres jusqu'à
-                                     # trouver celles qui donnent le plus petit coût
-        
-        # 2. POINT DE DÉPART  
-        initial_params,              # [0, 0, 0] = pas de translation, pas de rotation
-                                     # L'algorithme commence ici et explore autour
-                                     # Peut influencer la vitesse de convergence
-        
-        # 3. ARGUMENTS SUPPLÉMENTAIRES
-        args=(img_ref, img_mov),     # Ces arguments sont passés à ssd_cost() après params
-                                     # Équivalent à : ssd_cost(params, img_ref, img_mov)
-                                     # Permet de "figer" les images pendant l'optimisation
-        
-        # 4. ALGORITHME D'OPTIMISATION
-        method='Powell',             # Algorithme de Powell (sans gradient)
-                                     # AVANTAGES :
-                                     # - Pas besoin de calculer les dérivées
-                                     # - Robuste pour fonctions "bruyantes"
-                                     # - Bon pour 2-3 paramètres
-                                     # ALTERNATIVES :
-                                     # - 'Nelder-Mead' : simplex, robuste
-                                     # - 'BFGS' : plus rapide mais besoin gradient
-        
-        # 5. OPTIONS DE CONTRÔLE
-        options={'maxiter': 1000}    # Maximum 1000 évaluations de la fonction
-                                     # Sécurité pour éviter boucles infinies
-                                     # En pratique, converge en 50-200 évaluations 
-
-                                    #
-                                    
-    # ***********QUE FAIT minimize() EN INTERNE ? (Algorithme Powell simplifié)************
-    Étapes approximatives de l'algorithme Powell :
-    
-    1. Départ : params = [0, 0, 0]
-    2. Phase 1 - Optimisation de tx :
-       - Teste : [-1, 0, 0] → SSD = 1250
-       - Teste : [+1, 0, 0] → SSD = 1100  ← Mieux !
-       - Teste : [+2, 0, 0] → SSD = 950   ← Encore mieux !
-       - Teste : [+3, 0, 0] → SSD = 980   ← Pire, stop
-       - Meilleur tx ≈ 2
-    
-    3. Phase 2 - Optimisation de ty (tx fixé à 2) :
-       - Teste : [2, -1, 0] → SSD = 920
-       - Teste : [2, +1, 0] → SSD = 800   ← Mieux !
-       - Continue jusqu'à trouver meilleur ty
-    
-    4. Phase 3 - Optimisation angle (tx, ty fixés) :
-       - Teste différents angles...
-       - Trouve le meilleur
-    
-    5. Répète les phases jusqu'à convergence
-       (quand l'amélioration devient négligeable)
-    
-    Résultat : Solution optimale en ~100 tests au lieu de 20,000+ !
-"""
