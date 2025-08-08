@@ -125,8 +125,8 @@ def calculate_mi_score(img_ref, img_mov):
 # Script principal
 if __name__ == "__main__":
     # 1. Charger vos images (remplacez par vos chemins)
-    img_ref = cv2.imread('images/number2.png')  # image fixe
-    img_mov = cv2.imread('images/number2_rotated.png')     # image à recaler
+    img_ref = cv2.imread('images/number.png')  # image fixe
+    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')     # image à recaler
     
     # Score MI avant recalage
     mi_before = calculate_mi_score(img_ref, img_mov)

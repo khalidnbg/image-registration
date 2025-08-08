@@ -36,7 +36,7 @@ def demonstrate_translation(image_path, save_path='translated_image.jpg'):
         return
 
     # Set translation values
-    tx, ty = 10, 20  # pixels
+    tx, ty = 15, 20  # pixels
 
     # Apply translation
     translated = apply_translation(img, tx, ty)
@@ -48,11 +48,11 @@ def demonstrate_translation(image_path, save_path='translated_image.jpg'):
     # Display original and translated images
     plt.figure(figsize=(12, 6))
     plt.subplot(121), plt.imshow(img, cmap='gray'), plt.title('Original Image')
-    plt.subplot(122), plt.imshow(translated, cmap='gray'), plt.title('Translated Image')
+    plt.subplot(122), plt.imshow(translated, cmap='gray'), plt.title('Translated Image' + f' (tx={tx}, ty={ty})')
     plt.tight_layout()
     plt.show()
 
     return img, translated
 
 # Example usage:
-original, translated = demonstrate_translation('images/image_test.jpg', 'images/image_test_translated16_52.jpg')
+original, translated = demonstrate_translation('images/img_org.png', 'images/img_org_translated_15_20.png')

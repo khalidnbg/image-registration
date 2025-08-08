@@ -4,20 +4,18 @@ from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
 def ssd_cost(params, img_ref, img_mov, mask=None):
-    """Fonction qui calcule le coût SSD (plus c'est petit, mieux c'est)"""
-    # Récupération des paramètres de transformation
+    """Calcule le coût SSD entre image de référence et image mobile transformée"""
     tx, ty, angle = params
     
-    # Création de la matrice de transformation (rotation autour du centre)
+    # Matrice de transformation
     M = cv2.getRotationMatrix2D((img_mov.shape[1]//2, img_mov.shape[0]//2), angle, 1.0)
-    # Ajout de la translation à la matrice
     M[0, 2] += tx
     M[1, 2] += ty
     
-    # Application de la transformation à l'image mobile
+    # Transformation de l'image mobile
     img_transformed = cv2.warpAffine(img_mov, M, (img_ref.shape[1], img_ref.shape[0]))
     
-    # Calcul de la différence entre les images
+    # Calcul SSD
     if mask is not None:
         diff = (img_ref - img_transformed) * mask
     else:
@@ -26,31 +24,30 @@ def ssd_cost(params, img_ref, img_mov, mask=None):
     return np.sum(diff**2)
 
 def register_images_ssd(img_ref, img_mov, initial_params=[0, 0, 0]):
-    """Fonction principale qui trouve les meilleurs paramètres de recalage"""
+    """Recalage par optimisation SSD"""
     
-    # Conversion des images couleur en niveaux de gris
-    if len(img_ref.shape) == 3: # si l'image a 3 canaux (RGB)
+    # Conversion en niveaux de gris si nécessaire
+    if len(img_ref.shape) == 3:
         img_ref = cv2.cvtColor(img_ref, cv2.COLOR_BGR2GRAY)
     if len(img_mov.shape) == 3:
         img_mov = cv2.cvtColor(img_mov, cv2.COLOR_BGR2GRAY)
     
-    # Normalisation des valeurs entre 0 et 1 (au lieu de 0-255)
+    # Normalisation
     img_ref = img_ref.astype(np.float32) / 255.0
     img_mov = img_mov.astype(np.float32) / 255.0
     
-    # Optimisation : cherche les paramètres qui minimisent le coût SSD
-    result = minimize(ssd_cost, initial_params, # commence avec [0,0,0]
-                     args=(img_ref, img_mov), # passe les images à la fonction
-                     method='Powell', # algorithme d'optimisation
-                     options={'maxiter': 1000}) # maximum 1000 itérations
+    # Optimisation
+    result = minimize(ssd_cost, initial_params, 
+                     args=(img_ref, img_mov),
+                     method='Powell',
+                     options={'maxiter': 1000})
     
-    return result.x  # retourne les meilleurs paramètres trouvés
+    return result.x
 
 def apply_transformation(img, params):
-    """Applique la transformation trouvée à une image"""
-    tx, ty, angle = params  # récupère les paramètres
+    """Applique la transformation trouvée"""
+    tx, ty, angle = params
     
-		# Création de la même matrice de transformation
     M = cv2.getRotationMatrix2D((img.shape[1]//2, img.shape[0]//2), angle, 1.0)
     M[0, 2] += tx
     M[1, 2] += ty
@@ -60,36 +57,94 @@ def apply_transformation(img, params):
 # Exemple d'utilisation
 if __name__ == "__main__":
     # Charger vos images
-    img_ref = cv2.imread('images/img_org.png')
-    img_mov = cv2.imread('images/img_(10,15)_30_1-2.png')
+    img_ref = cv2.imread('images/tisdrin.png')  # image fixe
+    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')     # image à recaler
     
-    # 2. Lancer le recalage (trouve les meilleurs paramètres)
+    # Recalage
     params = register_images_ssd(img_ref, img_mov)
     print(f"Paramètres trouvés - tx: {params[0]:.2f}, ty: {params[1]:.2f}, angle: {params[2]:.2f}°")
     
-    # 3. Appliquer la transformation à l'image mobile
+    # Application de la transformation
     img_registered = apply_transformation(img_mov, params)
     
-    # 4. Affichage des résultats (avant/après)
+    # Affichage
     plt.figure(figsize=(15, 5))
-    
-    # Image de référence
     plt.subplot(131)
     plt.imshow(cv2.cvtColor(img_ref, cv2.COLOR_BGR2RGB))
     plt.title('Image de référence')
     plt.axis('off')
     
-    # Image mobile originale
     plt.subplot(132)
     plt.imshow(cv2.cvtColor(img_mov, cv2.COLOR_BGR2RGB))
-    plt.title('Image mobile (avant)')
+    plt.title('Image mobile')
     plt.axis('off')
     
-    # Image mobile après recalage
     plt.subplot(133)
     plt.imshow(cv2.cvtColor(img_registered, cv2.COLOR_BGR2RGB))
-    plt.title('Image mobile (après recalage)')
+    plt.title('Image recalée')
     plt.axis('off')
     
     plt.tight_layout()
     plt.show()
+
+"""
+# Optimisation SSD pour le recalage d'images
+    result = minimize(
+        # 1. FONCTION À MINIMISER
+        ssd_cost,                    # Notre fonction qui calcule le coût SSD
+                                     # minimize() va appeler cette fonction avec 
+                                     # différentes valeurs de paramètres jusqu'à
+                                     # trouver celles qui donnent le plus petit coût
+        
+        # 2. POINT DE DÉPART  
+        initial_params,              # [0, 0, 0] = pas de translation, pas de rotation
+                                     # L'algorithme commence ici et explore autour
+                                     # Peut influencer la vitesse de convergence
+        
+        # 3. ARGUMENTS SUPPLÉMENTAIRES
+        args=(img_ref, img_mov),     # Ces arguments sont passés à ssd_cost() après params
+                                     # Équivalent à : ssd_cost(params, img_ref, img_mov)
+                                     # Permet de "figer" les images pendant l'optimisation
+        
+        # 4. ALGORITHME D'OPTIMISATION
+        method='Powell',             # Algorithme de Powell (sans gradient)
+                                     # AVANTAGES :
+                                     # - Pas besoin de calculer les dérivées
+                                     # - Robuste pour fonctions "bruyantes"
+                                     # - Bon pour 2-3 paramètres
+                                     # ALTERNATIVES :
+                                     # - 'Nelder-Mead' : simplex, robuste
+                                     # - 'BFGS' : plus rapide mais besoin gradient
+        
+        # 5. OPTIONS DE CONTRÔLE
+        options={'maxiter': 1000}    # Maximum 1000 évaluations de la fonction
+                                     # Sécurité pour éviter boucles infinies
+                                     # En pratique, converge en 50-200 évaluations 
+
+                                    #
+                                    
+    # ***********QUE FAIT minimize() EN INTERNE ? (Algorithme Powell simplifié)************
+    Étapes approximatives de l'algorithme Powell :
+    
+    1. Départ : params = [0, 0, 0]
+    2. Phase 1 - Optimisation de tx :
+       - Teste : [-1, 0, 0] → SSD = 1250
+       - Teste : [+1, 0, 0] → SSD = 1100  ← Mieux !
+       - Teste : [+2, 0, 0] → SSD = 950   ← Encore mieux !
+       - Teste : [+3, 0, 0] → SSD = 980   ← Pire, stop
+       - Meilleur tx ≈ 2
+    
+    3. Phase 2 - Optimisation de ty (tx fixé à 2) :
+       - Teste : [2, -1, 0] → SSD = 920
+       - Teste : [2, +1, 0] → SSD = 800   ← Mieux !
+       - Continue jusqu'à trouver meilleur ty
+    
+    4. Phase 3 - Optimisation angle (tx, ty fixés) :
+       - Teste différents angles...
+       - Trouve le meilleur
+    
+    5. Répète les phases jusqu'à convergence
+       (quand l'amélioration devient négligeable)
+    
+    Résultat : Solution optimale en ~100 tests au lieu de 20,000+ !
+"""

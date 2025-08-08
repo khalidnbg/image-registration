@@ -69,7 +69,11 @@ def register_images_ncc(img_ref, img_mov, initial_params=[0, 0, 0]):
     result = minimize(ncc_cost, initial_params,  # commence avec [0,0,0]
                      args=(img_ref, img_mov),    # passe les images à la fonction
                      method='Powell',            # algorithme d'optimisation
-                     options={'maxiter': 1000})  # maximum 1000 itérations
+                     options={
+                        'maxiter': 1000,  # Augmenter le nombre d'itérations
+                        'ftol': 1e-4,    # Tolérance plus stricte
+                        'disp': True
+                    })
     
     return result.x  # retourne les meilleurs paramètres trouvés
 
@@ -102,9 +106,8 @@ def calculate_ncc_score(img_ref, img_mov):
 
 # Script principal
 if __name__ == "__main__":
-    # 1. Charger vos images (remplacez par vos chemins)
-    img_ref = cv2.imread('images/img_org.png')
-    img_mov = cv2.imread('images/img_(10,15)_30_1-2.png')
+    img_ref = cv2.imread('images/tisdrin.png')  # image fixe
+    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')     # image à recaler
     
     # Score NCC avant recalage
     ncc_before = calculate_ncc_score(img_ref, img_mov)

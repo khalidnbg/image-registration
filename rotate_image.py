@@ -36,7 +36,7 @@ def demonstrate_rotation(image_path, save_path='rotated_image.jpg'):
         return
 
     # Define rotation angle
-    angle = 50  # in degrees
+    angle = 18  # in degrees
 
     # Apply rotation
     rotated = apply_rotation(img, angle)
@@ -55,4 +55,4 @@ def demonstrate_rotation(image_path, save_path='rotated_image.jpg'):
     return img, rotated
 
 # Example usage:
-original, rotated = demonstrate_rotation('images/img_ref_translated_img.PNG', 'images/img_ref_translated_img.PNG_rotated50.jpg')
+original, rotated = demonstrate_rotation('images', 'images/tisdrin_rotated_18.jpg')
