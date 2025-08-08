@@ -42,7 +42,7 @@ def display_images(original, gray, magnitude, phase):
 
     plt.show()
 
-image_path = "images/reference_image.jpeg"
+image_path = "images/elephent.png"
 original_img, gray_img = load_image(image_path)
 magnitude, phase = compute_fourier(gray_img)
 
