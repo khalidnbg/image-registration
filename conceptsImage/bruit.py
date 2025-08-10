@@ -80,4 +80,4 @@ def demonstrate_noise(image_path, save_path='noisy_image.jpg'):
 
     return img, noisy
 
-original, contrast_adjusted = demonstrate_noise('images/elephent.png', 'images/elephant_contrast_2.png')
+original, contrast_adjusted = demonstrate_noise('images/img_org_translated_35_48.png', 'images/img_org_translated_35_48_noise.png')

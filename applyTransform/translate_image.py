@@ -36,7 +36,7 @@ def demonstrate_translation(image_path, save_path='translated_image.jpg'):
         return
 
     # Set translation values
-    tx, ty = 15, 20  # pixels
+    tx, ty = 15.15, 7.88  # pixels
 
     # Apply translation
     translated = apply_translation(img, tx, ty)
@@ -55,4 +55,4 @@ def demonstrate_translation(image_path, save_path='translated_image.jpg'):
     return img, translated
 
 # Example usage:
-original, translated = demonstrate_translation('images/img_org.png', 'images/img_org_translated_15_20.png')
+original, translated = demonstrate_translation('images/tisdrin.jpg', 'images/tisdrin_translated_15.15_7.88.png')
