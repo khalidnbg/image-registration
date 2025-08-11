@@ -208,7 +208,7 @@ def quick_correlation(path1, path2):
 if __name__ == "__main__":
     # Remplace par tes vrais chemins d'images
     image1_path = "images/tisdrin.png"  # ← Change ici
-    image2_path = "images/tisdrin_bright.png"  # ← Change ici
+    image2_path = "images/.jpg"  # ← Change ici
     
     print("=== Corrélation FFT pour images personnelles ===")
     

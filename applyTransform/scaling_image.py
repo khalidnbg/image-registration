@@ -56,4 +56,4 @@ def demonstrate_scaling(image_path, scale_x=1.2, scale_y=1.2, save_path='scaled_
     return img, scaled
 
 # Example usage:
-original, scaled = demonstrate_scaling('images/elephent.png', scale_x=1.2, scale_y=1.2, save_path='images/elephant_scaled_1.2.png')
+original, scaled = demonstrate_scaling('images/tisdrin_tra_15_7_rot_18.jpg', scale_x=1.2, scale_y=1.2, save_path='images/tisdrin_tra_15_7_rot_18_scale_1.2.jpg')

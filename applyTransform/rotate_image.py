@@ -55,4 +55,4 @@ def demonstrate_rotation(image_path, save_path='rotated_image.jpg'):
     return img, rotated
 
 # Example usage:
-original, rotated = demonstrate_rotation('images', 'images/tisdrin_rotated_18.jpg')
+original, rotated = demonstrate_rotation('images/tisdrin_tra_15_7.jpg', 'images/tisdrin_tra_15_7_rot_18.jpg')
