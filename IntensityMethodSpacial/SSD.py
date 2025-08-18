@@ -37,7 +37,8 @@ def register_images_ssd(img_ref, img_mov, initial_params=[0.0, 0.0, 0.0]):
     
     # Normalisation [0, 1]
     img_ref = img_ref.astype(np.float32) / 255.0
-    img_mov = img_mov.astype(np.float32) / 255.0
+    img_mov = cv2.resize(img_mov, (img_ref.shape[1], img_ref.shape[0]), interpolation=cv2.INTER_AREA)
+
 
     # Approche multi-échelle (pyramide)
     scales = [0.25, 0.5, 1.0]  # Résolutions réduites -> résolution originale
@@ -108,8 +109,9 @@ def calculate_ssd_score(img_ref, img_mov):
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    img_ref = cv2.imread('images/tisdrin.png')
-    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')
+    img_ref = cv2.imread('images/number2.png')
+    img_mov = cv2.imread('images/number2_rotated.png')
+
     
     # Score avant recalage
     ssd_before = calculate_ssd_score(img_ref, img_mov)
