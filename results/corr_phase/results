@@ -1,0 +1,25 @@
+Test 1:
+   Translation réelle : (10, 5)
+   Translation estimée: (np.int64(-10), np.int64(-5))
+   Valeur du pic corrélation: 0.97
+   
+Test 2:
+   Translation réelle : (-15, 8)
+   Translation estimée: (np.int64(15), np.int64(-8)) 
+   Valeur du pic corrélation: 0.97
+   
+Test 3:
+   Translation réelle : (20, -10)
+   Translation estimée: (np.int64(-20), np.int64(10))
+   Valeur du pic corrélation: 0.97
+   
+Test 4:
+   Translation réelle : (-25, -15)
+   Translation estimée: (np.int64(25), np.int64(15))
+   Valeur du pic corrélation: 0.97
+   
+Test 5:
+   Translation réelle : (30, 12)
+   Translation estimée: (np.int64(-30), np.int64(-12))
+   Valeur du pic corrélation: 0.97
+   

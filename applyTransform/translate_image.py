@@ -2,73 +2,63 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-def apply_affine_transform(image, pts1, pts2):
+def apply_translation(image, Tx, Ty=0):
     """
-    Apply affine transformation to an image.
+    Apply translation (Tx, Ty) to an image.
 
     Parameters:
     -----------
     image : numpy.ndarray
         Input image
-    pts1 : numpy.ndarray
-        Source points (3 points)
-    pts2 : numpy.ndarray
-        Destination points (3 points)
+    Tx : float
+        Translation in x-direction
+    Ty : float
+        Translation in y-direction
 
     Returns:
     --------
-    transformed_img : numpy.ndarray
-        Affine transformed image
+    translated_img : numpy.ndarray
+        Translated image
     """
     rows, cols = image.shape[:2]
 
-    # Calculate affine transformation matrix
-    M_affine = cv2.getAffineTransform(pts1, pts2)
+    # Create translation matrix
+    M_translation = np.float32([[1, 0, Tx],
+                                [0, 1, Ty]])
 
-    # Apply affine transformation
-    transformed_img = cv2.warpAffine(image, M_affine, (cols, rows))
+    # Apply translation
+    translated_img = cv2.warpAffine(image, M_translation, (cols, rows))
 
-    return transformed_img
+    return translated_img
 
-
-def demonstrate_affine(image_path, save_path='affine_image.jpg'):
-    # Read the image in grayscale
+def demonstrate_translation(image_path, save_path='translated_image.jpg'):
+    # Read the image
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         print(f"Error: Could not read image at {image_path}")
         return
 
-    rows, cols = img.shape[:2]
+    # Define translation
+    Tx, Ty = 45.5, 10.40   # Décalage de 50 px à droite
 
-    # Source points (top-left, top-right, bottom-left)
-    pts1 = np.float32([[50, 50], [200, 50], [50, 200]])
+    # Apply translation
+    translated = apply_translation(img, Tx, Ty)
 
-    # Destination points with stronger transformation:
-    # - Décalage important
-    # - Rotation + cisaillement accentué
-    # - Échelle changée
-    pts2 = np.float32([
-        [80, 150],   # plus bas et décalé
-        [250, 20],   # plus haut et plus à droite
-        [130, 280]   # beaucoup plus bas et à droite
-    ])
+    # Save the translated image
+    cv2.imwrite(save_path, translated)
+    print(f"Translated image saved to {save_path}")
 
-    # Apply affine transformation
-    transformed = apply_affine_transform(img, pts1, pts2)
-
-    # Save the transformed image
-    cv2.imwrite(save_path, transformed)
-    print(f"Affine transformed image saved to {save_path}")
-
-    # Display original and transformed images
+    # Display original and translated images
     plt.figure(figsize=(12, 6))
     plt.subplot(121), plt.imshow(img, cmap='gray'), plt.title('Original Image')
-    plt.subplot(122), plt.imshow(transformed, cmap='gray'), plt.title('Transformation affine pour l\'image')
+    plt.subplot(122), plt.imshow(translated, cmap='gray'), plt.title(f'Translated (Tx={Tx}, Ty={Ty})')
     plt.tight_layout()
     plt.show()
 
-    return img, transformed
+    return img, translated
 
-
-# Example usage
-original, transformed = demonstrate_affine('images/tisdrin.png', 'images/tisdrin_affine_strong.jpg')
+# Exemple d’utilisation
+original, translated = demonstrate_translation(
+    'results/brain_noise_contrast.jpg',
+    'results/brain_translated.jpg'
+)

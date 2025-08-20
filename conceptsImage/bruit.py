@@ -57,7 +57,7 @@ def demonstrate_noise(image_path, save_path='noisy_image.jpg'):
 
     # Set noise parameters
     noise_type = 'gaussian'  # 'gaussian', 'salt_pepper', 'uniform'
-    intensity = 25           # σ pour gaussian, probabilité pour salt_pepper, amplitude pour uniform
+    intensity = 45          # σ pour gaussian, probabilité pour salt_pepper, amplitude pour uniform
 
     # Apply noise
     noisy = apply_noise(img, noise_type, intensity)
@@ -80,4 +80,4 @@ def demonstrate_noise(image_path, save_path='noisy_image.jpg'):
 
     return img, noisy
 
-original, contrast_adjusted = demonstrate_noise('images/img_org_translated_35_48.png', 'images/img_org_translated_35_48_noise.png')
+original, contrast_adjusted = demonstrate_noise('results/brain.jpg', 'results/brain_bright.jpg')

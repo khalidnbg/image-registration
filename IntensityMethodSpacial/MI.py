@@ -123,10 +123,11 @@ def calculate_mi_score(img_ref, img_mov):
     return mutual_information_manual(img_ref, img_mov, bins=64)
 
 # Script principal
+# Script principal
 if __name__ == "__main__":
     # 1. Charger vos images (remplacez par vos chemins)
     img_ref = cv2.imread('images/number.png')  # image fixe
-    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')     # image à recaler
+    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')  # image à recaler
     
     # Score MI avant recalage
     mi_before = calculate_mi_score(img_ref, img_mov)
@@ -134,7 +135,11 @@ if __name__ == "__main__":
     
     # 2. Lancer le recalage (trouve les meilleurs paramètres)
     params = register_images_mi(img_ref, img_mov)
-    print(f"Paramètres trouvés - tx: {params[0]:.2f}, ty: {params[1]:.2f}, angle: {params[2]:.2f}°")
+    tx, ty, angle = params  # déballage pour clarté
+    print(f"Paramètres trouvés :")
+    print(f"  → Tx: {tx:.2f} pixels")
+    print(f"  → Ty: {ty:.2f} pixels")
+    print(f"  → Angle: {angle:.2f}°")
     
     # 3. Appliquer la transformation à l'image mobile
     img_registered = apply_transformation(img_mov, params)
@@ -162,7 +167,7 @@ if __name__ == "__main__":
     # Image mobile après recalage
     plt.subplot(133)
     plt.imshow(cv2.cvtColor(img_registered, cv2.COLOR_BGR2RGB))
-    plt.title(f'Image mobile (après recalage)\nMI: {mi_after:.3f}')
+    plt.title(f'Après recalage\nTx={tx:.1f}, Ty={ty:.1f}, Angle={angle:.1f}°\nMI: {mi_after:.3f}')
     plt.axis('off')
     
     plt.tight_layout()

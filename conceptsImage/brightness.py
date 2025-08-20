@@ -23,10 +23,10 @@ def increase_brightness(image, value=30):
     return bright_img
 
 # Exemple d'utilisation
-image = cv2.imread('images/tisdrin.png')
+image = cv2.imread('results/brain.jpg')
 bright_image = increase_brightness(image, value=50)
 
-cv2.imwrite('images/tisdrin_bright.png', bright_image)
+cv2.imwrite('results/brain_bright.jpg', bright_image)
 
 # Affichage avec matplotlib (convertir BGR en RGB)
 plt.subplot(1, 2, 1)

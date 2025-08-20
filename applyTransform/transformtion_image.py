@@ -46,9 +46,9 @@ def demonstrate_transformation(image_path, save_path='transformed_image.jpg'):
         return
         
     # Apply transformation
-    tx, ty = 10, 20  # Translation
-    angle = 15       # Rotation angle in degrees
-    scale = 0.9      # Scaling factor
+    tx, ty = 15.55, 20.60  # Translation
+    angle = 35       # Rotation angle in degrees
+    scale = 0.75    # Scaling factor
     
     transformed = apply_transformation(img, tx, ty, angle, scale)
     
@@ -66,4 +66,4 @@ def demonstrate_transformation(image_path, save_path='transformed_image.jpg'):
     return img, transformed
 
 # Example usage:
-original, transformed = demonstrate_transformation('images/number2.png', 'images/number2_transformed.png')
+original, transformed = demonstrate_transformation('results/brain.jpg', 'results/brain_transformed.jpg')

@@ -1,0 +1,27 @@
+***************** Translation *************
+
+Test 1:
+  Translation appliquée : Tx=10, Ty=5
+  Translation estimée   : Tx=-9.99, Ty=-5.01
+  MI avant  = 0.6665, après = 0.5188, gain = -0.1477
+
+Test 2:
+  Translation appliquée : Tx=-15, Ty=8
+  Translation estimée   : Tx=15.00, Ty=-8.00
+  MI avant  = 0.5808, après = 0.4283, gain = -0.1526
+
+Test 3:
+  Translation appliquée : Tx=20, Ty=-10
+  Translation estimée   : Tx=-20.01, Ty=10.01
+  MI avant  = 0.5223, après = 0.3584, gain = -0.1639
+
+Test 4:
+  Translation appliquée : Tx=-25, Ty=-15
+  Translation estimée   : Tx=24.99, Ty=15.00
+  MI avant  = 0.4606, après = 0.2801, gain = -0.1805
+
+Test 5:
+  Translation appliquée : Tx=30, Ty=12
+  Translation estimée   : Tx=-29.99, Ty=-12.01
+  MI avant  = 0.4357, après = 0.2432, gain = -0.1925
+

@@ -57,4 +57,4 @@ def demonstrate_contrast(image_path, save_path='contrast_image.jpg'):
     return img, contrast_adjusted
 
 # Example usage:
-original, contrast_adjusted = demonstrate_contrast('images/elephent.png', 'images/elephant_contrast_2.png')
+original, contrast_adjusted = demonstrate_contrast('results/brain_bright.jpg', 'results/brain_noise_contrast.jpg')
