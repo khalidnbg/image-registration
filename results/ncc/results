@@ -22,3 +22,12 @@ Test 5:
   Translation appliquée : Tx=30, Ty=12
   Translation estimée   : Tx=-30.01, Ty=-12.01
   NCC avant  = 0.4709, après = 0.3459, gain = -0.1250
+
+
+  ************ Rotation
+ Rotation réelle | Rotation estimée |  
+      15.00      |     15.00       |  
+      35.00      |     34.97       |  
+     -15.50      |      -15.50       |  
+      40.00      |     39.93       |  
+     -20.00      |      -20.00       |  

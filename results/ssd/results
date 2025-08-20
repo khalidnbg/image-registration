@@ -17,3 +17,10 @@ Test 4:
 Test 5:
   Translation appliquée : Tx=30, Ty=12
   Translation estimée   : Tx=-30.01, Ty=-12.01
+
+****************** Rotation
+Rotation réelle:  15.00°, estimée: -15.00°, erreur:  30.00°
+Rotation réelle:  35.00°, estimée: -34.97°, erreur:  69.97°
+Rotation réelle: -15.50°, estimée:  15.50°, erreur:  31.00°
+Rotation réelle:  40.00°, estimée: -39.92°, erreur:  79.92°
+Rotation réelle: -20.00°, estimée:  20.00°, erreur:  40.00°

@@ -22,4 +22,11 @@ Test 5:
    Translation réelle : (30, 12)
    Translation estimée: (np.int64(-30), np.int64(-12))
    Valeur du pic corrélation: 0.97
-   
+
+*********Rotation
+
+  |      15.0       |      15.0       |       
+  |      35.0       |      35.0       |       
+  |      -15.5      |      -16.0      |  
+  |      40.0       |      40.0       |       
+  |      -20.0      |      -20.0      |    

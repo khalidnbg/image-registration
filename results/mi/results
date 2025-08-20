@@ -25,3 +25,9 @@ Test 5:
   Translation estimée   : Tx=-29.99, Ty=-12.01
   MI avant  = 0.4357, après = 0.2432, gain = -0.1925
 
+****************************** Rotation
+réelle=15.00°, estimée=15.00°,
+réelle=35.00°, estimée=34.99°,
+réelle=-15.50°, estimée=-15.50°,
+réelle=40.00°, estimée=40.00°,
+réelle=-20.00°, estimée=-20.00°,
