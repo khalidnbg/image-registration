@@ -31,3 +31,12 @@ réelle=35.00°, estimée=34.99°,
 réelle=-15.50°, estimée=-15.50°,
 réelle=40.00°, estimée=40.00°,
 réelle=-20.00°, estimée=-20.00°,
+
+
+********** all
+Score MI avant recalage: 0.2774
+Paramètres trouvés :
+  → Tx: 10.00 pixels (réel: 15.55)
+  → Ty: 15.00 pixels (réel: 20.60)
+  → Angle: 30.00° (réel: 35.00)
+  → Échelle: 1.200 (réel: 1.250)

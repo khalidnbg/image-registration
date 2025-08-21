@@ -31,3 +31,13 @@ Test 5:
      -15.50      |      -15.50       |  
       40.00      |     39.93       |  
      -20.00      |      -20.00       |  
+
+     *********** all
+Recherche grossière: tx=0.0, ty=-20.0, angle=-30.0°, scale=0.80
+Paramètres estimés (NCC):
+tx: -0.68, ty: -20.73
+angle: -34.98°, scale: 0.80
+Vraies valeurs: tx=15.55, ty=20.60, angle=35°, scale=1.25
+NCC avant: 0.3247
+NCC après: 0.9960
+Amélioration: 0.6713

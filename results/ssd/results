@@ -24,3 +24,11 @@ Rotation réelle:  35.00°, estimée: -34.97°, erreur:  69.97°
 Rotation réelle: -15.50°, estimée:  15.50°, erreur:  31.00°
 Rotation réelle:  40.00°, estimée: -39.92°, erreur:  79.92°
 Rotation réelle: -20.00°, estimée:  20.00°, erreur:  40.00°
+
+****************** all
+Paramètres estimés:
+tx: 17.55, ty: 0.94
+angle: 5.31°, scale: 0.86
+Vraies valeurs: tx=15.55, ty=20.60, angle=35°, scale=1.25
+SSD avant: 12998.00
+SSD après: 7653.03

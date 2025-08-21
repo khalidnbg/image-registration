@@ -48,7 +48,7 @@ def demonstrate_transformation(image_path, save_path='transformed_image.jpg'):
     # Apply transformation
     tx, ty = 15.55, 20.60  # Translation
     angle = 35       # Rotation angle in degrees
-    scale = 0.75    # Scaling factor
+    scale = 1.25   # Scaling factor
     
     transformed = apply_transformation(img, tx, ty, angle, scale)
     
@@ -59,7 +59,7 @@ def demonstrate_transformation(image_path, save_path='transformed_image.jpg'):
     # Display original and transformed images
     plt.figure(figsize=(12, 6))
     plt.subplot(121), plt.imshow(img, cmap='gray'), plt.title('Original Image')
-    plt.subplot(122), plt.imshow(transformed, cmap='gray'), plt.title('Transformed Image')
+    plt.subplot(122), plt.imshow(transformed, cmap='gray'), plt.title('Image transformé.')
     plt.tight_layout()
     plt.show()
     

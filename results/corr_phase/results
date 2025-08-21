@@ -30,3 +30,8 @@ Test 5:
   |      -15.5      |      -16.0      |  
   |      40.0       |      40.0       |       
   |      -20.0      |      -20.0      |    
+
+  ********** all
+Rotation estimée (°) : 34.9922
+Échelle estimée : 1.2356
+Translation estimée (y, x) : [ 642.05 -158.95]
