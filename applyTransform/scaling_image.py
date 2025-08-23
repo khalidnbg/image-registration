@@ -32,7 +32,7 @@ def apply_scaling(image, scale_x, scale_y):
 
     return scaled_img
 
-def demonstrate_scaling(image_path, scale_x=1.2, scale_y=1.2, save_path='scaled_image.jpg'):
+def demonstrate_scaling(image_path, scale_x=0.7, scale_y=0.7, save_path='scaled_image.jpg'):
     # Read the image
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
@@ -56,4 +56,4 @@ def demonstrate_scaling(image_path, scale_x=1.2, scale_y=1.2, save_path='scaled_
     return img, scaled
 
 # Example usage:
-original, scaled = demonstrate_scaling('images/tisdrin_tra_15_7_rot_18.jpg', scale_x=1.2, scale_y=1.2, save_path='images/tisdrin_tra_15_7_rot_18_scale_1.2.jpg')
+original, scaled = demonstrate_scaling('images/tisdrin.jpg', scale_x=0.7, scale_y=0.7, save_path='images/tisdrin_test.jpg')

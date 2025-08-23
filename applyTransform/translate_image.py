@@ -39,7 +39,7 @@ def demonstrate_translation(image_path, save_path='translated_image.jpg'):
         return
 
     # Define translation
-    Tx, Ty = 45.5, 10.40   # Décalage de 50 px à droite
+    Tx, Ty = 30, 12   # Décalage de 50 px à droite
 
     # Apply translation
     translated = apply_translation(img, Tx, Ty)
@@ -59,6 +59,6 @@ def demonstrate_translation(image_path, save_path='translated_image.jpg'):
 
 # Exemple d’utilisation
 original, translated = demonstrate_translation(
-    'results/brain_noise_contrast.jpg',
-    'results/brain_translated.jpg'
+    'images/tisdrin_test.jpg',
+    'images/tisdrin_test_30_12.jpg'
 )

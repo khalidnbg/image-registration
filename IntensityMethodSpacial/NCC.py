@@ -127,8 +127,8 @@ def calculate_ncc_score(img_ref, img_mov):
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    img_ref = cv2.imread('images/tisdrin.png')
-    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')
+    img_ref = cv2.imread('images/tisdrin_test.jpg')
+    img_mov = cv2.imread('images/tisdrin_test_30_12_20deg.jpg')
     
     # Score avant recalage
     ncc_before = calculate_ncc_score(img_ref, img_mov)

@@ -126,9 +126,8 @@ def calculate_mi_score(img_ref, img_mov):
 # Script principal
 if __name__ == "__main__":
     # 1. Charger vos images (remplacez par vos chemins)
-    img_ref = cv2.imread('images/number.png')  # image fixe
-    img_mov = cv2.imread('images/tisdrin_translated_12_27.jpg')  # image à recaler
-    
+    img_ref = cv2.imread('images/tisdrin_test.jpg')
+    img_mov = cv2.imread('images/tisdrin_test_30_12_20deg.jpg')
     # Score MI avant recalage
     mi_before = calculate_mi_score(img_ref, img_mov)
     print(f"Score MI avant recalage: {mi_before:.4f}")
@@ -161,14 +160,14 @@ if __name__ == "__main__":
     # Image mobile originale
     plt.subplot(132)
     plt.imshow(cv2.cvtColor(img_mov, cv2.COLOR_BGR2RGB))
-    plt.title(f'Image mobile (avant)\nMI: {mi_before:.3f}')
+    plt.title(f'Image mobile')
     plt.axis('off')
     
     # Image mobile après recalage
-    plt.subplot(133)
-    plt.imshow(cv2.cvtColor(img_registered, cv2.COLOR_BGR2RGB))
-    plt.title(f'Après recalage\nTx={tx:.1f}, Ty={ty:.1f}, Angle={angle:.1f}°\nMI: {mi_after:.3f}')
-    plt.axis('off')
+    # plt.subplot(133)
+    # plt.imshow(cv2.cvtColor(img_registered, cv2.COLOR_BGR2RGB))
+    # plt.title(f'Après recalage\nTx={tx:.1f}, Ty={ty:.1f}, Angle={angle:.1f}°\nMI: {mi_after:.3f}')
+    # plt.axis('off')
     
     plt.tight_layout()
     plt.show()

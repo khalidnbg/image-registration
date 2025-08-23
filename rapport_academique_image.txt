@@ -1,0 +1,29 @@
+================================================================================
+RAPPORT ACADÉMIQUE - CARACTÉRISTIQUES DE L'IMAGE
+================================================================================
+
+📁 INFORMATIONS DU FICHIER:
+   Nom: brain.jpg
+   Chemin: results/brain.jpg
+   Taille: 25.52 KB (26137 bytes)
+   Format: .JPG
+   Créé le: 2025-08-20 01:08:03.344751
+   Modifié le: 2025-08-20 00:06:32.063904
+
+🖼️  PROPRIÉTÉS DE L'IMAGE:
+   Dimensions: 512 × 512 pixels
+   Nombre total de pixels: 262,144
+   Canaux de couleur: 3
+   Espace colorimétrique: BGR
+   Type de données: uint8
+   Ratio d'aspect: 512:512
+
+📊 STATISTIQUES D'INTENSITÉ:
+   Intensité minimale: 0.00
+   Intensité maximale: 255.00
+   Intensité moyenne: 31.82
+   Écart-type: 44.95
+   Médiane: 5.00
+   Plage dynamique: 255.00
+   Entropie: 5.3098 (mesure de complexité)
+
